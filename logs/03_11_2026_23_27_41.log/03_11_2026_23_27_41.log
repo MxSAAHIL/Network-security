@@ -1,0 +1,6 @@
+[ 2026-03-11 23:28:04,191 ] 74 dagshub.auth.tokens - INFO - Removed expired tokens from the token cache
+[ 2026-03-11 23:28:04,193 ] 312 dagshub.auth.tokens - ERROR - Error while storing DagsHub token cache: Traceback (most recent call last):
+  File "C:\COURSE PROJECTS\Network Security project\venv\lib\site-packages\dagshub\auth\tokens.py", line 309, in _store_cache_file
+    with open(self.cache_location, "w") as f:
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\muham\\AppData\\Local\\dagshub\\dagshub\\Cache\\tokens'
+

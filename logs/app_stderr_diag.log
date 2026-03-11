@@ -1,0 +1,16 @@
+2026/03/11 23:45:16 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.schemas
+2026/03/11 23:45:16 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.tables
+2026/03/11 23:45:16 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.types
+2026/03/11 23:45:16 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.constraints
+2026/03/11 23:45:16 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.defaults
+2026/03/11 23:45:16 INFO alembic.runtime.plugins: setup plugin alembic.autogenerate.comments
+2026/03/11 23:45:16 INFO mlflow.store.db.utils: Creating initial MLflow database tables...
+2026/03/11 23:45:16 INFO mlflow.store.db.utils: Updating database tables
+2026/03/11 23:45:16 INFO alembic.runtime.migration: Context impl SQLiteImpl.
+2026/03/11 23:45:16 INFO alembic.runtime.migration: Will assume non-transactional DDL.
+2026/03/11 23:45:16 INFO alembic.runtime.migration: Context impl SQLiteImpl.
+2026/03/11 23:45:16 INFO alembic.runtime.migration: Will assume non-transactional DDL.
+INFO:     Started server process [11516]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
