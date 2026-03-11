@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing URL Detector</title>
+    <style>
+        :root {
+            --bg-1: #f4fbf8;
+            --bg-2: #e7f2ff;
+            --ink: #1b2430;
+            --muted: #5b6574;
+            --accent: #006d77;
+            --accent-2: #118ab2;
+            --ok: #1f9d55;
+            --bad: #d64545;
+            --card: #ffffff;
+            --line: #d8e2e8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            color: var(--ink);
+            background: linear-gradient(130deg, var(--bg-1), var(--bg-2));
+            min-height: 100vh;
+        }
+
+        .wrap {
+            width: min(980px, 94%);
+            margin: 32px auto;
+        }
+
+        .hero {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 12px 34px rgba(16, 43, 69, 0.08);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .sub {
+            margin-top: 10px;
+            color: var(--muted);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-top: 18px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 18px;
+        }
+
+        h2 {
+            margin: 0 0 10px;
+            font-size: 1.1rem;
+        }
+
+        .field {
+            width: 100%;
+            border: 1px solid #c4d4dc;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 0.98rem;
+        }
+
+        .btn {
+            margin-top: 12px;
+            border: none;
+            border-radius: 10px;
+            padding: 11px 14px;
+            background: linear-gradient(120deg, var(--accent), var(--accent-2));
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            filter: brightness(1.06);
+        }
+
+        .note {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .result, .error {
+            margin-top: 18px;
+            border-radius: 14px;
+            padding: 16px;
+            background: var(--card);
+            border: 1px solid var(--line);
+        }
+
+        .pill {
+            display: inline-block;
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: 0.86rem;
+            font-weight: 700;
+        }
+
+        .ok {
+            background: #e8f8ef;
+            color: var(--ok);
+        }
+
+        .bad {
+            background: #fdecec;
+            color: var(--bad);
+        }
+
+        .error {
+            color: #9b2c2c;
+            background: #fff2f2;
+            border-color: #f3caca;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            margin-top: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+        }
+
+        th, td {
+            border: 1px solid #dde7ef;
+            padding: 6px 8px;
+            font-size: 0.84rem;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #f4f8fb;
+        }
+
+        .links {
+            margin-top: 14px;
+        }
+
+        .links a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            margin-right: 12px;
+        }
+
+        @media (max-width: 860px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="hero">
+            <h1>Phishing URL Detector</h1>
+            <div class="sub">Predict from a single URL or upload a CSV for batch prediction.</div>
+
+            <div class="grid">
+                <div class="card">
+                    <h2>Single URL Prediction</h2>
+                    <form action="/predict-url" method="post">
+                        <input class="field" type="text" name="url" placeholder="https://example.com/login" required>
+                        <button class="btn" type="submit">Predict URL</button>
+                    </form>
+                    <div class="note">Quick check for your own URL input.</div>
+                </div>
+
+                <div class="card">
+                    <h2>Batch CSV Prediction</h2>
+                    <form action="/predict" method="post" enctype="multipart/form-data">
+                        <input class="field" type="file" name="file" accept=".csv" required>
+                        <button class="btn" type="submit">Upload CSV</button>
+                    </form>
+                    <div class="note">Use a CSV with model features as columns.</div>
+                </div>
+            </div>
+
+            <div class="links">
+                <a href="/docs">Open Swagger</a>
+            </div>
+        </div>
+
+        {% if error %}
+        <div class="error">
+            <strong>Error:</strong> {{ error }}
+        </div>
+        {% endif %}
+
+        {% if result %}
+        <div class="result">
+            <div><strong>URL:</strong> {{ result.url }}</div>
+            <div style="margin-top: 8px;">
+                <strong>Prediction:</strong>
+                {% if result.prediction == 1 %}
+                    <span class="pill ok">{{ result.label }} (1)</span>
+                {% else %}
+                    <span class="pill bad">{{ result.label }} (0)</span>
+                {% endif %}
+            </div>
+            <div class="table-wrap">
+                {{ result.table_html | safe }}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

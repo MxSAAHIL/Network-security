@@ -25,13 +25,24 @@ import dagshub
 # DagsHub + MLflow Setup
 # =======================
 
-dagshub.init(
-    repo_owner="MxSAAHIL",
-    repo_name="Network-security",
-    mlflow=True
-)
+def _configure_tracking():
+    """Initialize DagsHub/MLflow if available; otherwise continue locally."""
+    enable_dagshub = os.getenv("ENABLE_DAGSHUB_TRACKING", "false").strip().lower() == "true"
+    if enable_dagshub:
+        try:
+            dagshub.init(
+                repo_owner="MxSAAHIL",
+                repo_name="Network-security",
+                mlflow=True
+            )
+        except Exception as e:
+            logging.warning(f"DagsHub init skipped: {e}")
+    else:
+        logging.info("DagsHub tracking disabled (set ENABLE_DAGSHUB_TRACKING=true to enable).")
+    mlflow.set_experiment("network_security_experiment")
 
-mlflow.set_experiment("network_security_experiment")
+
+_configure_tracking()
 
 
 # =======================
